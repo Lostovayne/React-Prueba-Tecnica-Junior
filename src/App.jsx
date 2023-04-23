@@ -24,14 +24,15 @@ export const App = () => {
     if (!fact) return
     const firstWord = fact.split(' ', 3).join(' ')
     fetch(`https://cataas.com/cat/says/${firstWord}?size=50&color=red&json=true`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error(' Ocurrio un error al hacer fetch ')
+        return res.json()
+      })
       .then((response) => {
         const { url } = response
         setImageUrl(url)
       })
-      .catch((err) => {
-        setError(err.message)
-      })
+      .catch((error) => setError(error.message))
   }, [fact])
 
   return (
